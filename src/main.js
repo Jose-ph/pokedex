@@ -7,6 +7,8 @@ const $getButton = document.querySelector('#get-btn')
  let nextUrl = []
  let previousUrl=[]
 
+ //Crear vista de detalle con un modal usar id para obtener detallles
+
 $previousButton.onclick = function () {
 
     if(previousUrl.length !== 0 && previousUrl[0] !== null){
@@ -36,9 +38,10 @@ $nextButton.onclick = function (){
 
 $getButton.onclick = function (){
 
+    $getButton.classList.add('disabled')
 
    getPokemons(firstUrl,nextUrl,previousUrl);
-    let $pokemonContainer = document.querySelector('#pokemon-container')
+   
 
 
 }
@@ -72,8 +75,8 @@ function createCard(pokemon){
     newCard.innerHTML = `
     <img src="${pokemon.sprites["front_default"]}" class="card-img-top" alt="${pokemon.name}">
     <div class="card-body">
-      <h5 class="card-title">${pokemon.name}</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <h5 class="card-title">${pokemon.name} ${pokemon.id}</h5>
+      <p class="card-text"> </p>
       <a href="#" class="btn btn-primary">Ver detalle</a>
     `
 
@@ -114,6 +117,7 @@ function getPokemons(url,nextUrl,previousUrl){
             .then(resp => resp.json())
             .then (resp =>{
 
+                console.log(resp)
                 createCard(resp)
                 
                 /* 
