@@ -4,18 +4,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="src/style.css">
     <title>Pokedex</title>
 </head>
 <body>
     
-    <h1 class="text-3xl font-bold underline">Pokedex!!</h1>
-    <h2>Encuentra toda la información de los pokemones !</h2>
+    <div class="container bg-primary mb-5">
+
+        <h1 class="text-3xl font-bold underline">Pokedex!!</h1>
+        <h2>Encuentra toda la información de los pokemones !</h2>
+       <button class="btn btn-success" id="get-btn">Traer pokemones !</button>
+       <button class="btn btn-danger" id="previous-btn" >Anterior</button>
+       <button class="btn btn-danger" id="next-btn"  >Siguiente</button>
+      </div>
+
+      <div class="container bg-warning d-flex flex-row justify-content-center flex-wrap " id="pokemon-container" >
+
+       <!--  <div class="row d-flex flex-row justify-content-evenly"> -->
+          <!--   <div class="card mx-2" style="width: 12rem;">
+                <img src="../src/img/pikachu-diseno.webp" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Pokemon UNO</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href="#" class="btn btn-primary">Ver detalle</a>
+                </div>
+              </div> -->
+           
+
+       <!--  </div> -->
+        
+       
+
+      </div>
+  
 
 
 
-    <script src="src/main.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
