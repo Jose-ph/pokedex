@@ -1,15 +1,63 @@
 
 const $getButton = document.querySelector('#get-btn')
+ const $nextButton = document.querySelector('#next-btn')
+ const $previousButton = document.querySelector('#previous-btn')
 
+ let firstUrl = "https://pokeapi.co/api/v2/pokemon?limit=10"
+ let nextUrl = []
+ let previousUrl=[]
+
+$previousButton.onclick = function () {
+
+    if(previousUrl.length !== 0 && previousUrl[0] !== null){
+
+        //detelePreviousCards
+        deleteCards()
+        getPokemons(previousUrl[0],nextUrl,previousUrl)
+
+    }
+   
+    else {console.error("no se puede realizar la petición ERROR")}
+
+
+}
+
+$nextButton.onclick = function (){
+
+    if(nextUrl.length !== 0 ){
+        //deletePreviousCards
+        deleteCards()
+        getPokemons(nextUrl[0],nextUrl,previousUrl)
+    }
+  
+    else {console.error("no se puede realizar la petición ERROR")}
+
+}
 
 $getButton.onclick = function (){
 
 
-   getPokemons();
+   getPokemons(firstUrl,nextUrl,previousUrl);
     let $pokemonContainer = document.querySelector('#pokemon-container')
 
 
 }
+
+
+    function deleteCards(){
+
+        let cards= document.querySelectorAll('.card')
+
+        cards.forEach(card => {
+
+            card.remove()
+            
+        });
+
+
+
+    }
+
 
 function createCard(pokemon){
 
@@ -35,7 +83,7 @@ function createCard(pokemon){
 
  
 
-function getPokemons(url,offset){
+function getPokemons(url,nextUrl,previousUrl){
 
    //offset 0 by default
 
@@ -45,17 +93,20 @@ function getPokemons(url,offset){
    //Armar cards
    //Agregar boton siguiente y anterior
 
-    fetch(' https://pokeapi.co/api/v2/pokemon?limit=10') 
+    fetch(`${url}`) 
 
     .then(resp => resp.json())
     .then(resp =>{
         
         console.log(resp.results)
         console.log(resp.next)
+        console.log(resp.previous)
         
+        nextUrl[0]= resp.next
+        previousUrl[0]= resp.previous
        
         let newPokemons = resp.results
-        let pokemonsUrls = [];
+       // let pokemonsUrls = [];
        
          newPokemons.forEach((pokemon) => {
 
