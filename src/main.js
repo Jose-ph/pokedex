@@ -3,6 +3,7 @@ const $getButton = document.querySelector('#get-btn')
  const $nextButton = document.querySelector('#next-btn')
  const $previousButton = document.querySelector('#previous-btn')
 
+ 
  let firstUrl = "https://pokeapi.co/api/v2/pokemon?limit=10"
  let nextUrl = []
  let previousUrl=[]
@@ -70,20 +71,60 @@ function createCard(pokemon){
 
     let newCard = document.createElement('div')
     newCard.setAttribute('class',"card mx-2 mb-3 mt-3")
+    newCard.setAttribute('id',`${pokemon.id}`)
     newCard.style.width = "12rem"
 
     newCard.innerHTML = `
     <img src="${pokemon.sprites["front_default"]}" class="card-img-top" alt="${pokemon.name}">
     <div class="card-body">
-      <h5 class="card-title">${pokemon.name} ${pokemon.id}</h5>
+      <h5 class="card-title">${pokemon.name}</h5>
       <p class="card-text"> </p>
-      <a href="#" class="btn btn-primary">Ver detalle</a>
+      <a href="#" class="btn btn-primary detail">Ver detalle</a>
     `
 
     $pokemonContainer.appendChild(newCard)
 }
 
+function getPokemonById(id){
 
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    .then(resp => resp.json())
+    .then(resp => {
+
+        console.log(resp)
+
+
+
+    })
+
+}
+
+//vervideo memotest para mejorar esto no usar for each para cada boton
+function handleDetails(){
+
+    let detailButtons = document.querySelectorAll('.detail')
+    console.log(detailButtons)
+
+
+    detailButtons.forEach(button => {
+
+        button.onclick = ()=>{
+
+            console.log(button.parentElement.parentElement.id)
+
+         let pokemonId = button.parentElement.parentElement.id
+
+         getPokemonById(pokemonId)
+
+        }
+         
+        
+    });
+
+
+
+
+}
  
 
 function getPokemons(url,nextUrl,previousUrl){
