@@ -16,7 +16,7 @@ $previousButton.onclick = function () {
 
         //detelePreviousCards
         deleteCards()
-        getPokemons(previousUrl[0],nextUrl,previousUrl)
+        handlePokemons(previousUrl[0],nextUrl,previousUrl)
 
     }
    
@@ -30,7 +30,7 @@ $nextButton.onclick = function (){
     if(nextUrl.length !== 0 ){
         //deletePreviousCards
         deleteCards()
-        getPokemons(nextUrl[0],nextUrl,previousUrl)
+        handlePokemons(nextUrl[0],nextUrl,previousUrl)
     }
   
     else {console.error("no se puede realizar la petición ERROR")}
@@ -41,8 +41,12 @@ $getButton.onclick = function (){
 
     $getButton.classList.add('disabled')
 
-   getPokemons(firstUrl,nextUrl,previousUrl);
-   
+   handlePokemons(firstUrl,nextUrl,previousUrl);
+
+  
+
+
+
 
 
 }
@@ -65,7 +69,7 @@ $getButton.onclick = function (){
 
 function createCard(pokemon){
 
-
+    /*  <a href="#" class="btn btn-primary detail">Ver detalle</a> */
     //console.log("esta info llega a la funcion create card", pokemon)
     let $pokemonContainer = document.querySelector('#pokemon-container')
 
@@ -79,20 +83,80 @@ function createCard(pokemon){
     <div class="card-body">
       <h5 class="card-title">${pokemon.name}</h5>
       <p class="card-text"> </p>
-      <a href="#" class="btn btn-primary detail">Ver detalle</a>
+     
+      <button type="button" class="btn btn-warning detail" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+         Ver detalles
+        </button>
+  
     `
 
     $pokemonContainer.appendChild(newCard)
 }
 
-function getPokemonById(id){
+function setModal(info){
+
+    /* <img src="${info.sprites['front_default']}" class="card-img-top" alt="${info.name}"> */
+    console.log(info)
+    let $modal = document.querySelector('#exampleModalCenter')
+    $modal.innerHTML = `
+    
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">${info.name}</h5>
+       <!--  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="modal-body">
+      
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="${info.sprites['front_default']}" class="d-block w-100" alt="${info.name}">
+    </div>
+    <div class="carousel-item">
+    <img src="${info.sprites['back_default']}" class="d-block w-100" alt="${info.name}">
+    </div>
+   <p>Peso : ${info.weight} Altura: ${info.height} Habilidades: ${info.abilities[0].ability.name} </p> 
+
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+ 
+    
+    `
+
+}
+
+function handlePokemonById(id){
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then(resp => resp.json())
     .then(resp => {
 
         console.log(resp)
-
+        setModal(resp)
 
 
     })
@@ -103,18 +167,18 @@ function getPokemonById(id){
 function handleDetails(){
 
     let detailButtons = document.querySelectorAll('.detail')
-    console.log(detailButtons)
+   // console.log(detailButtons)
 
 
     detailButtons.forEach(button => {
 
         button.onclick = ()=>{
 
-            console.log(button.parentElement.parentElement.id)
+           //console.log(button.parentElement.parentElement.id)
 
          let pokemonId = button.parentElement.parentElement.id
 
-         getPokemonById(pokemonId)
+            handlePokemonById(pokemonId)
 
         }
          
@@ -127,24 +191,18 @@ function handleDetails(){
 }
  
 
-function getPokemons(url,nextUrl,previousUrl){
+function handlePokemons(url,nextUrl,previousUrl){
 
-   //offset 0 by default
-
-
-   //Quizás cambiar nombre de la función
-   //utilizar la propiedad Next que realiza la cuenta del offset 
-   //Armar cards
-   //Agregar boton siguiente y anterior
+   
 
     fetch(`${url}`) 
 
     .then(resp => resp.json())
     .then(resp =>{
         
-        console.log(resp.results)
+       /*  console.log(resp.results)
         console.log(resp.next)
-        console.log(resp.previous)
+        console.log(resp.previous) */
         
         nextUrl[0]= resp.next
         previousUrl[0]= resp.previous
@@ -160,7 +218,7 @@ function getPokemons(url,nextUrl,previousUrl){
 
                 console.log(resp)
                 createCard(resp)
-                
+                handleDetails() 
                 /* 
                 console.log("esta es la info de cada pokemón",resp)
                 console.log("este es el nombre del pokemon",resp.name)
