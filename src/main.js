@@ -8,7 +8,7 @@ const $getButton = document.querySelector('#get-btn')
  let nextUrl = []
  let previousUrl=[]
 
- //Crear vista de detalle con un modal usar id para obtener detallles
+
 
 $previousButton.onclick = function () {
 
