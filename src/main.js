@@ -108,7 +108,7 @@ function setModal(info){
           <span aria-hidden="true">&times;</span>
         </button> -->
       </div>
-      <div class="modal-body">
+      <div class="modal-body bg-primary">
       
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
@@ -121,8 +121,8 @@ function setModal(info){
    <p>Peso : ${info.weight} Altura: ${info.height} Habilidades: ${info.abilities[0].ability.name} </p> 
 
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  <button  class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span id="test" class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
   <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
