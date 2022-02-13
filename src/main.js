@@ -1,84 +1,56 @@
 
-const $getButton = document.querySelector('#get-btn')
- const $nextButton = document.querySelector('#next-btn')
- const $previousButton = document.querySelector('#previous-btn')
+const $getButton = document.querySelector("#get-btn");
+const $nextButton = document.querySelector("#next-btn");
+const $previousButton = document.querySelector("#previous-btn");
 
- 
- let firstUrl = "https://pokeapi.co/api/v2/pokemon?limit=10"
- let nextUrl = []
- let previousUrl=[]
-
-
+let firstUrl = "https://pokeapi.co/api/v2/pokemon?limit=10";
+let nextUrl = [];
+let previousUrl = [];
 
 $previousButton.onclick = function () {
+  if (previousUrl.length !== 0 && previousUrl[0] !== null) {
+    
+    deleteCards();
+    handlePokemons(previousUrl[0], nextUrl, previousUrl);
+  } else {
+    console.error("no se puede realizar la petición ERROR");
+  }
+};
 
-    if(previousUrl.length !== 0 && previousUrl[0] !== null){
-
-        //detelePreviousCards
-        deleteCards()
-        handlePokemons(previousUrl[0],nextUrl,previousUrl)
-
-    }
+$nextButton.onclick = function () {
+  if (nextUrl.length !== 0) {
    
-    else {console.error("no se puede realizar la petición ERROR")}
+    deleteCards();
+    handlePokemons(nextUrl[0], nextUrl, previousUrl);
+  } else {
+    console.error("no se puede realizar la petición ERROR");
+  }
+};
 
+$getButton.onclick = function () {
+  $getButton.classList.add("disabled");
 
+  handlePokemons(firstUrl, nextUrl, previousUrl);
+};
+
+function deleteCards() {
+  let cards = document.querySelectorAll(".card");
+
+  cards.forEach((card) => {
+    card.remove();
+  });
 }
 
-$nextButton.onclick = function (){
+function createCard(pokemon) {
+ 
+  let $pokemonContainer = document.querySelector("#pokemon-container");
 
-    if(nextUrl.length !== 0 ){
-        //deletePreviousCards
-        deleteCards()
-        handlePokemons(nextUrl[0],nextUrl,previousUrl)
-    }
-  
-    else {console.error("no se puede realizar la petición ERROR")}
+  let newCard = document.createElement("div");
+  newCard.setAttribute("class", "card mx-2 mb-3 mt-3");
+  newCard.setAttribute("id", `${pokemon.id}`);
+  newCard.style.width = "12rem";
 
-}
-
-$getButton.onclick = function (){
-
-    $getButton.classList.add('disabled')
-
-   handlePokemons(firstUrl,nextUrl,previousUrl);
-
-  
-
-
-
-
-
-}
-
-
-    function deleteCards(){
-
-        let cards= document.querySelectorAll('.card')
-
-        cards.forEach(card => {
-
-            card.remove()
-            
-        });
-
-
-
-    }
-
-
-function createCard(pokemon){
-
-    /*  <a href="#" class="btn btn-primary detail">Ver detalle</a> */
-    //console.log("esta info llega a la funcion create card", pokemon)
-    let $pokemonContainer = document.querySelector('#pokemon-container')
-
-    let newCard = document.createElement('div')
-    newCard.setAttribute('class',"card mx-2 mb-3 mt-3")
-    newCard.setAttribute('id',`${pokemon.id}`)
-    newCard.style.width = "12rem"
-
-    newCard.innerHTML = `
+  newCard.innerHTML = `
     <img src="${pokemon.sprites["front_default"]}" class="card-img-top" alt="${pokemon.name}">
     <div class="card-body">
       <h5 class="card-title">${pokemon.name}</h5>
@@ -88,17 +60,16 @@ function createCard(pokemon){
          Ver detalles
         </button>
   
-    `
+    `;
 
-    $pokemonContainer.appendChild(newCard)
+  $pokemonContainer.appendChild(newCard);
 }
 
-function setModal(info){
-
-    /* <img src="${info.sprites['front_default']}" class="card-img-top" alt="${info.name}"> */
-    console.log(info)
-    let $modal = document.querySelector('#exampleModalCenter')
-    $modal.innerHTML = `
+function setModal(info) {
+  
+  console.log(info);
+  let $modal = document.querySelector("#exampleModalCenter");
+  $modal.innerHTML = `
     
     <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -113,10 +84,10 @@ function setModal(info){
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="${info.sprites['front_default']}" class="d-block w-100" alt="${info.name}">
+      <img src="${info.sprites["front_default"]}" class="d-block w-100" alt="${info.name}">
     </div>
     <div class="carousel-item">
-    <img src="${info.sprites['back_default']}" class="d-block w-100" alt="${info.name}">
+    <img src="${info.sprites["back_default"]}" class="d-block w-100" alt="${info.name}">
     </div>
    <p>Peso : ${info.weight} Altura: ${info.height} Habilidades: ${info.abilities[0].ability.name} </p> 
 
@@ -145,97 +116,53 @@ function setModal(info){
   </div>
  
     
-    `
-
+    `;
 }
 
-function handlePokemonById(id){
-
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-    .then(resp => resp.json())
-    .then(resp => {
-
-        console.log(resp)
-        setModal(resp)
-
-
-    })
-
-}
-
-//vervideo memotest para mejorar esto no usar for each para cada boton
-function handleDetails(){
-
-    let detailButtons = document.querySelectorAll('.detail')
-   // console.log(detailButtons)
-
-
-    detailButtons.forEach(button => {
-
-        button.onclick = ()=>{
-
-           //console.log(button.parentElement.parentElement.id)
-
-         let pokemonId = button.parentElement.parentElement.id
-
-            handlePokemonById(pokemonId)
-
-        }
-         
-        
+function handlePokemonById(id) {
+  fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    .then((resp) => resp.json())
+    .then((resp) => {
+      console.log(resp);
+      setModal(resp);
     });
-
-
-
-
 }
+
+
+function handleDetails() {
+  let detailButtons = document.querySelectorAll(".detail");
  
+  detailButtons.forEach((button) => {
+    button.onclick = () => {
+      
 
-function handlePokemons(url,nextUrl,previousUrl){
+      let pokemonId = button.parentElement.parentElement.id;
 
-   
+      handlePokemonById(pokemonId);
+    };
+  });
+}
 
-    fetch(`${url}`) 
+function handlePokemons(url, nextUrl, previousUrl) {
+  fetch(`${url}`)
+    .then((resp) => resp.json())
+    .then((resp) => {
+      
+      nextUrl[0] = resp.next;
+      previousUrl[0] = resp.previous;
 
-    .then(resp => resp.json())
-    .then(resp =>{
-        
-       /*  console.log(resp.results)
-        console.log(resp.next)
-        console.log(resp.previous) */
-        
-        nextUrl[0]= resp.next
-        previousUrl[0]= resp.previous
-       
-        let newPokemons = resp.results
-       // let pokemonsUrls = [];
-       
-         newPokemons.forEach((pokemon) => {
-
-            fetch(`${pokemon.url}`)
-            .then(resp => resp.json())
-            .then (resp =>{
-
-                console.log(resp)
-                createCard(resp)
-                handleDetails() 
-                /* 
-                console.log("esta es la info de cada pokemón",resp)
-                console.log("este es el nombre del pokemon",resp.name)
-                console.log("esta es una imagen del pokemón",resp.sprites['front_default']) */
-
-
-            })
-            
-        });
- 
-
-        
-
-
-    })
-
-   
-
+      let newPokemons = resp.results;
      
+
+      newPokemons.forEach((pokemon) => {
+        fetch(`${pokemon.url}`)
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
+            createCard(resp);
+            handleDetails();
+          
+          });
+      });
+    });
 }
