@@ -102,11 +102,6 @@ function setModal(info) {
   </button>
 </div>
 
-
-
-
-
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
