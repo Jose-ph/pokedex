@@ -67,7 +67,7 @@ function createCard(pokemon) {
 
 function setModal(info) {
   
-  console.log(info);
+  
   let $modal = document.querySelector("#exampleModalCenter");
   $modal.innerHTML = `
     
@@ -123,7 +123,7 @@ function handlePokemonById(id) {
   fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then((resp) => resp.json())
     .then((resp) => {
-      console.log(resp);
+      
       setModal(resp);
     });
 }
@@ -158,7 +158,7 @@ function handlePokemons(url, nextUrl, previousUrl) {
         fetch(`${pokemon.url}`)
           .then((resp) => resp.json())
           .then((resp) => {
-            console.log(resp);
+            
             createCard(resp);
             handleDetails();
           
