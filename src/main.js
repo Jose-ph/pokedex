@@ -1,40 +1,17 @@
+function handleDetails() {
+  const detailButtons = document.querySelectorAll('.detail');
 
-const $getButton = document.querySelector("#get-btn");
-const $nextButton = document.querySelector("#next-btn");
-const $previousButton = document.querySelector("#previous-btn");
+  detailButtons.forEach((button) => {
+    button.onclick = () => {
+      const pokemonId = button.parentElement.parentElement.id;
 
-let firstUrl = "https://pokeapi.co/api/v2/pokemon?limit=10";
-let nextUrl = [];
-let previousUrl = [];
-
-$previousButton.onclick = function () {
-  if (previousUrl.length !== 0 && previousUrl[0] !== null) {
-    
-    deleteCards();
-    handlePokemons(previousUrl[0], nextUrl, previousUrl);
-  } else {
-    console.error("no se puede realizar la petición ERROR");
-  }
-};
-
-$nextButton.onclick = function () {
-  if (nextUrl.length !== 0) {
-   
-    deleteCards();
-    handlePokemons(nextUrl[0], nextUrl, previousUrl);
-  } else {
-    console.error("no se puede realizar la petición ERROR");
-  }
-};
-
-$getButton.onclick = function () {
-  $getButton.classList.add("disabled");
-
-  handlePokemons(firstUrl, nextUrl, previousUrl);
-};
+      handlePokemonById(pokemonId);
+    };
+  });
+}
 
 function deleteCards() {
-  let cards = document.querySelectorAll(".card");
+  const cards = document.querySelectorAll('.card');
 
   cards.forEach((card) => {
     card.remove();
@@ -42,16 +19,15 @@ function deleteCards() {
 }
 
 function createCard(pokemon) {
- 
-  let $pokemonContainer = document.querySelector("#pokemon-container");
+  const $pokemonContainer = document.querySelector('#pokemon-container');
 
-  let newCard = document.createElement("div");
-  newCard.setAttribute("class", "card mx-2 mb-3 mt-3");
-  newCard.setAttribute("id", `${pokemon.id}`);
-  newCard.style.width = "12rem";
+  const newCard = document.createElement('div');
+  newCard.setAttribute('class', 'card mx-2 mb-3 mt-3');
+  newCard.setAttribute('id', `${pokemon.id}`);
+  newCard.style.width = '12rem';
 
   newCard.innerHTML = `
-    <img src="${pokemon.sprites["front_default"]}" class="card-img-top" alt="${pokemon.name}">
+    <img src="${pokemon.sprites.front_default}" class="card-img-top" alt="${pokemon.name}">
     <div class="card-body">
       <h5 class="card-title">${pokemon.name}</h5>
       <p class="card-text"> </p>
@@ -66,9 +42,7 @@ function createCard(pokemon) {
 }
 
 function setModal(info) {
-  
-  
-  let $modal = document.querySelector("#exampleModalCenter");
+  const $modal = document.querySelector('#exampleModalCenter');
   $modal.innerHTML = `
     
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -84,12 +58,12 @@ function setModal(info) {
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="${info.sprites["front_default"]}" class="d-block w-100" alt="${info.name}">
+      <img src="${info.sprites.front_default}" class="d-block w-100" alt="${info.name}">
     </div>
     <div class="carousel-item">
-    <img src="${info.sprites["back_default"]}" class="d-block w-100" alt="${info.name}">
+    <img src="${info.sprites.back_default}" class="d-block w-100" alt="${info.name}">
     </div>
-   <p>Peso : ${info.weight} Altura: ${info.height} Habilidades: ${info.abilities[0].ability.name} </p> 
+   <p>Peso : ${info.weight} Altura: ${info.height} Habilidad: ${info.abilities[0].ability.name} </p> 
 
   </div>
   <button  class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -118,46 +92,58 @@ function handlePokemonById(id) {
   fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then((resp) => resp.json())
     .then((resp) => {
-      
       setModal(resp);
     });
-}
-
-
-function handleDetails() {
-  let detailButtons = document.querySelectorAll(".detail");
- 
-  detailButtons.forEach((button) => {
-    button.onclick = () => {
-      
-
-      let pokemonId = button.parentElement.parentElement.id;
-
-      handlePokemonById(pokemonId);
-    };
-  });
 }
 
 function handlePokemons(url, nextUrl, previousUrl) {
   fetch(`${url}`)
     .then((resp) => resp.json())
     .then((resp) => {
-      
       nextUrl[0] = resp.next;
       previousUrl[0] = resp.previous;
 
-      let newPokemons = resp.results;
-     
+      const newPokemons = resp.results;
 
       newPokemons.forEach((pokemon) => {
         fetch(`${pokemon.url}`)
-          .then((resp) => resp.json())
-          .then((resp) => {
-            
-            createCard(resp);
+          .then((response) => response.json())
+          .then((response) => {
+            createCard(response);
             handleDetails();
-          
           });
       });
     });
 }
+
+const $getButton = document.querySelector('#get-btn');
+const $nextButton = document.querySelector('#next-btn');
+const $previousButton = document.querySelector('#previous-btn');
+
+const firstUrl = 'https://pokeapi.co/api/v2/pokemon?limit=10';
+const nextUrl = [];
+const previousUrl = [];
+
+$previousButton.onclick = () => {
+  if (previousUrl.length !== 0 && previousUrl[0] !== null) {
+    deleteCards();
+    handlePokemons(previousUrl[0], nextUrl, previousUrl);
+  } else {
+    console.error('no se puede realizar la petición ERROR');
+  }
+};
+
+$nextButton.onclick = () => {
+  if (nextUrl.length !== 0) {
+    deleteCards();
+    handlePokemons(nextUrl[0], nextUrl, previousUrl);
+  } else {
+    console.error('no se puede realizar la petición ERROR');
+  }
+};
+
+$getButton.onclick = () => {
+  $getButton.classList.add('disabled');
+
+  handlePokemons(firstUrl, nextUrl, previousUrl);
+};
